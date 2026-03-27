@@ -418,6 +418,7 @@ cat("   ✅ Boxplots gerados\n")
 # 4. Gráfico de p-valores
 cat("✓ Criando gráfico de p-valores...\n")
 
+# Criar dataframe com todos os p-valores
 pvalores_df <- data.frame(
   Ativo = rep(resultados_testes$Ativo, 3),
   Teste = rep(c("Shapiro-Wilk", "Jarque-Bera", "Anderson-Darling"), each = nrow(resultados_testes)),
@@ -425,34 +426,41 @@ pvalores_df <- data.frame(
               resultados_testes$Jarque_Bera_p,
               resultados_testes$Anderson_Darling_p)
 )
+
+# Converter para numérico
 pvalores_df$p_valor <- as.numeric(pvalores_df$p_valor)
 
-png(file.path(graficos_dir, "04_pvalores_testes.png"), 
-    width = 10, height = 8, units = "in", res = 300)
+# Criar o gráfico com ggplot2
+library(ggplot2)
 
-barplot_heights <- tapply(pvalores_df$p_valor, 
-                          list(pvalores_df$Ativo, pvalores_df$Teste), 
-                          identity)
+p <- ggplot(pvalores_df, aes(x = Teste, y = p_valor, fill = Ativo)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9), alpha = 0.8) +
+  geom_hline(yintercept = 0.05, color = "red", linetype = "dashed", size = 1) +
+  annotate("text", x = 0.8, y = 0.055, label = "α = 0.05", color = "red", size = 4) +
+  labs(
+    title = "p-valores dos Testes de Normalidade",
+    subtitle = "Valores abaixo da linha vermelha (p < 0.05) rejeitam a hipótese de normalidade",
+    x = "Teste Estatístico",
+    y = "p-valor",
+    fill = "Ativo",
+    caption = "Shapiro-Wilk, Jarque-Bera e Anderson-Darling convergem para rejeição da normalidade"
+  ) +
+  scale_fill_manual(values = c("WEGE3" = "#2E86AB", "HGLG11" = "#A23B72", "BTC-USD" = "#F18F01")) +
+  scale_y_log10() +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    plot.subtitle = element_text(size = 10, hjust = 0.5),
+    legend.position = "bottom",
+    axis.text.x = element_text(face = "bold", size = 11),
+    plot.caption = element_text(hjust = 0, face = "italic", size = 8)
+  )
 
-barplot(barplot_heights,
-        beside = TRUE,
-        col = c("#2E86AB", "#A23B72", "#F18F01"),
-        main = "p-valores dos Testes de Normalidade",
-        xlab = "Teste Estatístico",
-        ylab = "p-valor",
-        ylim = c(0, max(pvalores_df$p_valor, 0.05) + 0.1),
-        legend.text = rownames(barplot_heights),
-        args.legend = list(title = "Ativo", x = "topright"))
+# Salvar
+ggsave(file.path(graficos_dir, "04_pvalores_testes.png"), 
+       p, width = 10, height = 7, dpi = 300)
 
-abline(h = 0.05, col = "red", lwd = 2, lty = 2)
-text(x = 1, y = 0.06, labels = "α = 0.05", col = "red", pos = 4)
-
-dev.off()
-cat("   ✅ Gráfico de p-valores gerado\n")
-
-cat("\n✅ Todos os gráficos salvos em:", graficos_dir, "\n")
-
-# ----------------------------------------------------------------------------
+cat("   ✅ Gráfico de p-valores gerado\n")# ----------------------------------------------------------------------------
 # 9. EXPORTAÇÃO DOS RESULTADOS (SALVANDO NA PASTA DA PARTE 1)
 # ----------------------------------------------------------------------------
 
