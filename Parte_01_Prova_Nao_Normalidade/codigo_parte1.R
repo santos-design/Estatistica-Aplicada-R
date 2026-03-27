@@ -416,7 +416,6 @@ dev.off()
 cat("   ✅ Boxplots gerados\n")
 
 # 4. Gráfico de p-valores
-# 4. Gráfico de p-valores (Versão 3 - Pontos e Linhas)
 cat("✓ Criando gráfico de p-valores...\n")
 
 # Criar dataframe com todos os p-valores
@@ -431,13 +430,14 @@ pvalores_df <- data.frame(
 # Converter para numérico
 pvalores_df$p_valor <- as.numeric(pvalores_df$p_valor)
 
-# Criar o gráfico com ggplot2 (Versão 3 - Pontos e Linhas)
+# Criar o gráfico com ggplot2
 library(ggplot2)
 
 p <- ggplot(pvalores_df, aes(x = Teste, y = p_valor, color = Ativo, shape = Ativo)) +
-  geom_point(size = 5, alpha = 0.9) +
-  geom_line(aes(group = Ativo), linetype = "dotted", alpha = 0.5) +
-  geom_hline(yintercept = 0.05, color = "#e74c3c", linetype = "dashed", size = 1) +
+  geom_point(size = 4, alpha = 0.9) +
+  geom_line(aes(group = Ativo), linetype = "dashed", alpha = 0.6, size = 0.8) +
+  geom_hline(yintercept = 0.05, color = "#e74c3c", linetype = "solid", size = 0.8) +
+  annotate("text", x = 3.2, y = 0.07, label = "α = 0.05", color = "#e74c3c", size = 4, fontface = "bold") +
   scale_color_manual(
     values = c("WEGE3" = "#3498db", "HGLG11" = "#e67e22", "BTC-USD" = "#2ecc71"),
     labels = c("WEGE3 (Ação)", "HGLG11 (FII)", "BTC-USD (Bitcoin)")
@@ -447,8 +447,8 @@ p <- ggplot(pvalores_df, aes(x = Teste, y = p_valor, color = Ativo, shape = Ativ
     labels = c("WEGE3 (Ação)", "HGLG11 (FII)", "BTC-USD (Bitcoin)")
   ) +
   scale_y_log10(
-    breaks = c(1e-150, 1e-100, 1e-50, 1e-20, 1e-10, 0.001, 0.01, 0.05, 0.1, 0.5, 1),
-    labels = c("10⁻¹⁵⁰", "10⁻¹⁰⁰", "10⁻⁵⁰", "10⁻²⁰", "10⁻¹⁰", "0.001", "0.01", "0.05", "0.1", "0.5", "1")
+    breaks = c(1e-20, 1e-15, 1e-10, 1e-5, 0.001, 0.01, 0.05, 0.1, 0.5, 1),
+    labels = c("10⁻²⁰", "10⁻¹⁵", "10⁻¹⁰", "10⁻⁵", "0.001", "0.01", "0.05", "0.1", "0.5", "1")
   ) +
   labs(
     title = "Análise de Normalidade dos Retornos",
@@ -457,22 +457,22 @@ p <- ggplot(pvalores_df, aes(x = Teste, y = p_valor, color = Ativo, shape = Ativ
     y = "p-valor (escala logarítmica)",
     color = "Ativo",
     shape = "Ativo",
-    caption = "Todos os pontos estão abaixo de 0.05 → forte evidência contra a normalidade"
+    caption = "Todos os pontos estão abaixo de 0.05 → rejeitamos a hipótese de normalidade"
   ) +
   theme_minimal(base_size = 12) +
   theme(
-    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
-    plot.subtitle = element_text(size = 11, hjust = 0.5, color = "gray40"),
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5, margin = margin(b = 5)),
+    plot.subtitle = element_text(size = 11, hjust = 0.5, color = "gray40", margin = margin(b = 15)),
     plot.caption = element_text(size = 8, color = "gray50", hjust = 0, margin = margin(t = 10)),
     legend.position = "bottom",
-    legend.box = "vertical",
     legend.title = element_text(face = "bold", size = 10),
     legend.text = element_text(size = 9),
     axis.title.y = element_text(face = "bold", size = 11, margin = margin(r = 10)),
     axis.text.x = element_text(face = "bold", size = 11, color = "gray30"),
     axis.text.y = element_text(size = 9),
     panel.grid.major.x = element_blank(),
-    panel.grid.minor = element_blank()
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_line(color = "gray90", size = 0.5)
   )
 
 # Salvar
