@@ -415,7 +415,7 @@ boxplot(retorno_log ~ symbol,
 dev.off()
 cat("   ✅ Boxplots gerados\n")
 
-# 4. Gráfico de p-valores
+# 4. Gráfico de p-valoress
 cat("✓ Criando gráfico de p-valores...\n")
 
 # Criar dataframe com todos os p-valores
@@ -427,57 +427,38 @@ pvalores_df <- data.frame(
               resultados_testes$Anderson_Darling_p)
 )
 
-# Converter para numérico
 pvalores_df$p_valor <- as.numeric(pvalores_df$p_valor)
 
-# Criar o gráfico com ggplot2
-library(ggplot2)
+# Organizar em matriz para o barplot
+barplot_matrix <- matrix(pvalores_df$p_valor, nrow = 3, byrow = TRUE)
+rownames(barplot_matrix) <- c("WEGE3", "HGLG11", "BTC-USD")
+colnames(barplot_matrix) <- c("Shapiro-Wilk", "Jarque-Bera", "Anderson-Darling")
 
-p <- ggplot(pvalores_df, aes(x = Teste, y = p_valor, color = Ativo, shape = Ativo)) +
-  geom_point(size = 4, alpha = 0.9) +
-  geom_line(aes(group = Ativo), linetype = "dashed", alpha = 0.6, size = 0.8) +
-  geom_hline(yintercept = 0.05, color = "#e74c3c", linetype = "solid", size = 0.8) +
-  annotate("text", x = 3.2, y = 0.07, label = "α = 0.05", color = "#e74c3c", size = 4, fontface = "bold") +
-  scale_color_manual(
-    values = c("WEGE3" = "#3498db", "HGLG11" = "#e67e22", "BTC-USD" = "#2ecc71"),
-    labels = c("WEGE3 (Ação)", "HGLG11 (FII)", "BTC-USD (Bitcoin)")
-  ) +
-  scale_shape_manual(
-    values = c("WEGE3" = 16, "HGLG11" = 17, "BTC-USD" = 18),
-    labels = c("WEGE3 (Ação)", "HGLG11 (FII)", "BTC-USD (Bitcoin)")
-  ) +
-  scale_y_log10(
-    breaks = c(1e-20, 1e-15, 1e-10, 1e-5, 0.001, 0.01, 0.05, 0.1, 0.5, 1),
-    labels = c("10⁻²⁰", "10⁻¹⁵", "10⁻¹⁰", "10⁻⁵", "0.001", "0.01", "0.05", "0.1", "0.5", "1")
-  ) +
-  labs(
-    title = "Análise de Normalidade dos Retornos",
-    subtitle = "p-valores dos testes estatísticos por ativo",
-    x = "",
-    y = "p-valor (escala logarítmica)",
-    color = "Ativo",
-    shape = "Ativo",
-    caption = "Todos os pontos estão abaixo de 0.05 → rejeitamos a hipótese de normalidade"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", size = 16, hjust = 0.5, margin = margin(b = 5)),
-    plot.subtitle = element_text(size = 11, hjust = 0.5, color = "gray40", margin = margin(b = 15)),
-    plot.caption = element_text(size = 8, color = "gray50", hjust = 0, margin = margin(t = 10)),
-    legend.position = "bottom",
-    legend.title = element_text(face = "bold", size = 10),
-    legend.text = element_text(size = 9),
-    axis.title.y = element_text(face = "bold", size = 11, margin = margin(r = 10)),
-    axis.text.x = element_text(face = "bold", size = 11, color = "gray30"),
-    axis.text.y = element_text(size = 9),
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.grid.major.y = element_line(color = "gray90", size = 0.5)
-  )
+# Abrir dispositivo PNG
+png(file.path(graficos_dir, "04_pvalores_testes.png"), 
+    width = 10, height = 7, units = "in", res = 300)
 
-# Salvar
-ggsave(file.path(graficos_dir, "04_pvalores_testes.png"), 
-       p, width = 10, height = 7, dpi = 300)
+# Criar o gráfico
+barplot(barplot_matrix,
+        beside = TRUE,
+        col = c("#2E86AB", "#A23B72", "#F18F01"),
+        main = "Testes de Normalidade - p-valores",
+        xlab = "",
+        ylab = "p-valor (escala logarítmica)",
+        legend.text = rownames(barplot_matrix),
+        args.legend = list(title = "Ativo", x = "topright", bty = "n"),
+        log = "y",
+        ylim = c(1e-150, 1),
+        las = 2)
+
+# Adicionar linha de significância
+abline(h = 0.05, col = "red", lwd = 2, lty = 2)
+
+# Adicionar texto
+text(x = 1, y = 0.07, labels = "α = 0.05", col = "red", pos = 4, font = 2)
+
+# Fechar dispositivo
+dev.off()
 
 cat("   ✅ Gráfico de p-valores gerado\n")
 # 9. EXPORTAÇÃO DOS RESULTADOS (SALVANDO NA PASTA DA PARTE 1)
