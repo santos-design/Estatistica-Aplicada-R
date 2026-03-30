@@ -1,0 +1,5 @@
+"Teste","Estatistica","p_valor","Conclusao"
+"Teste t",0.0101397806809096,0.991911251720017,"Não rejeita H0"
+"Wilcoxon",220487,0.653397922005629,"Não rejeita H0"
+"Kolmogorov-Smirnov",0.105917380643172,0.00125987495171466,"Rejeita H0"
+"Kruskal-Wallis",0.356144639581536,0.836881898176432,"Não rejeita H0"
