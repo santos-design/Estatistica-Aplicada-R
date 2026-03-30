@@ -1,4 +1,4 @@
-# Parte 1: Prova da Não-Normalidade dos Retornos Financeiros
+# 📊 Estatística Aplicada em R - Análise Completa de Ativos Financeiros
 
 [![R Version](https://img.shields.io/badge/R-%3E%3D%204.0-blue.svg)](https://www.r-project.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -11,184 +11,176 @@
 
 ---
 
-## 🎯 Objetivo
+## 🎯 Sobre o Projeto
 
-Demonstrar estatisticamente que os retornos de ativos financeiros **NÃO seguem uma distribuição normal**, contrariando uma das premissas básicas da teoria financeira clássica (Random Walk Hypothesis).
+Este projeto é uma jornada completa pela **Estatística Aplicada em R**, utilizando dados reais de ativos financeiros (ações, fundos imobiliários e criptomoedas) para demonstrar conceitos fundamentais de análise estatística, modelagem e previsão.
 
-## 📚 Fundamentação Teórica
-
-A hipótese de normalidade dos retornos é fundamental para:
-- Modelo de Precificação de Ativos (CAPM)
-- Teoria Moderna de Portfólio (Markowitz)
-- Cálculo de Value at Risk (VaR) paramétrico
-- Testes de hipótese em regressões financeiras
-
-**Evidências empíricas** (Mandelbrot, 1963; Fama, 1965) mostram que:
-- Retornos financeiros apresentam caudas pesadas (leptocurtose)
-- Distribuição não é normal, mas sim estável ou com caudas de potência
-- Eventos extremos ocorrem com maior frequência que o previsto pela normal
-
-## 🧪 Hipóteses Testadas
-
-```
-H₀: Os retornos seguem distribuição normal
-H₁: Os retornos NÃO seguem distribuição normal
-```
-
-## 📊 Ativos Analisados
-
-| Ticker | Nome | Classe | Fonte |
-|--------|------|--------|-------|
-| WEGE3 | WEG S.A. | Ação Brasileira | Yahoo Finance (yfR) |
-| HGLG11 | CSHG Logística FII | Fundo Imobiliário | Yahoo Finance (yfR) |
-| BTC-USD | Bitcoin | Criptomoeda | Yahoo Finance (yfR) |
-
-## 📈 Período de Análise
-
-- **Data inicial:** 2024-01-01
-- **Data final:** 2026-03-20
-- **Total de dias úteis:** ~550 por ativo
+O objetivo é demonstrar, na prática, como a estatística pode ser aplicada para:
+- 📈 Analisar o comportamento de ativos financeiros
+- 🔬 Testar hipóteses e validar pressupostos
+- 🎲 Simular cenários futuros via Monte Carlo
+- 📊 Modelar riscos e retornos
+- 🔮 Prever comportamentos futuros
 
 ---
 
-## 🔬 Metodologia
-
-### 1. Coleta de Dados
-Utilização do pacote `yfR` para coleta de dados do Yahoo Finance, com sistema de cache para eficiência.
-
-### 2. Cálculo dos Retornos
-```r
-retorno_log = log(P_t / P_{t-1})
-```
-
-### 3. Análise de Momentos
-- **Assimetria (Skewness):** Mede a inclinação da distribuição
-- **Curtose (Kurtosis):** Mede o peso das caudas
-- **Excesso de Curtose:** Curtose - 3 (excesso em relação à normal)
-
-### 4. Testes de Normalidade
-
-| Teste | Descrição |
-|-------|-----------|
-| **Shapiro-Wilk** | Teste de normalidade mais poderoso |
-| **Jarque-Bera** | Baseado em assimetria e curtose |
-| **Anderson-Darling** | Sensível às caudas da distribuição |
-
----
-
-## 📊 Resultados
-
-### Momentos Estatísticos
-
-| Ativo | Assimetria | Curtose | Excesso | Dias Positivos |
-|-------|------------|---------|---------|----------------|
-| **WEGE3** | -0.78 | 8.14 | 5.14 | 50.8% |
-| **HGLG11** | +0.73 | 7.03 | 4.03 | 50.3% |
-| **BTC-USD** | +0.09 | 3.44 | 0.44 | 50.4% |
-
-### Testes de Normalidade
-
-| Ativo | Shapiro-Wilk | Jarque-Bera | Anderson-Darling | Conclusão |
-|-------|--------------|-------------|------------------|-----------|
-| **WEGE3** | p = 1.24e-17 ❌ | p = 5.21e-145 ❌ | p = 9.70e-18 ❌ | Rejeita H₀ |
-| **HGLG11** | p = 6.27e-16 ❌ | p = 1.19e-92 ❌ | p = 1.36e-21 ❌ | Rejeita H₀ |
-| **BTC-USD** | p = 2.11e-14 ❌ | p = 2.29e-02 ❌ | p = 6.14e-19 ❌ | Rejeita H₀ |
-
-### Interpretação dos Resultados
-
-**WEGE3 (Ação Brasileira)**
-- Assimetria negativa (-0.78) → maior probabilidade de quedas bruscas
-- Curtose elevada (8.14) → caudas muito pesadas
-- Risco de eventos extremos significativo
-
-**HGLG11 (Fundo Imobiliário)**
-- Assimetria positiva (0.73) → chance de ganhos excepcionais
-- Curtose elevada (7.03) → caudas pesadas para um FII
-- Menor volatilidade entre os ativos
-
-**BTC-USD (Bitcoin)**
-- Assimetria próxima de zero (0.09) → distribuição mais simétrica
-- Curtose moderada (3.44) → mais próxima da normal
-- Maior volatilidade entre os ativos
-
----
-
-## 📊 Visualizações Geradas
-
-| Arquivo | Descrição |
-|---------|-----------|
-| `01_qqplot_*.png` | Q-Q Plot com envelope de confiança 95% |
-| `02_histograma_*.png` | Histograma com curva normal sobreposta |
-| `03_boxplots_comparativos.png` | Boxplots comparativos dos 3 ativos |
-| `04_pvalores_testes.png` | Gráfico de barras dos p-valores |
-
----
-
-## 🎯 Conclusão
-
-**❌ TODOS os ativos rejeitam a hipótese de normalidade (p < 0.05)**
-
-- Retornos financeiros **NÃO seguem distribuição normal**
-- Modelos baseados na normalidade (CAPM, VaR paramétrico) devem ser usados com cautela
-- Recomendado usar modelos que consideram caudas pesadas (t-Student, GARCH)
-
----
-
-## 📁 Estrutura de Arquivos
+## 🗂️ Estrutura do Projeto
 
 ```
-Parte_01_Prova_Nao_Normalidade/
-├── codigo_parte1.R          # Código completo da análise
-├── README.md                # Esta documentação
-├── graficos/                # Gráficos gerados
-│   ├── 01_qqplot_WEGE3.png
-│   ├── 01_qqplot_HGLG11.png
-│   ├── 01_qqplot_BTC_USD.png
-│   ├── 02_histograma_WEGE3.png
-│   ├── 02_histograma_HGLG11.png
-│   ├── 02_histograma_BTC_USD.png
-│   ├── 03_boxplots_comparativos.png
-│   └── 04_pvalores_testes.png
-└── resultados/              # Resultados exportados
-    ├── retornos_calculados.csv
-    ├── momentos_estatisticos.csv
-    ├── testes_normalidade.csv
-    └── resultados_parte1.rds
+Estatistica-Aplicada-R/
+├── Parte_01_Prova_Nao_Normalidade/     # Prova empírica da não-normalidade
+├── Parte_02_Simulacao_Monte_Carlo/     # Análise de risco e simulações
+├── Parte_03_Inferencia_Estatistica/    # Testes de hipóteses e bootstrap
+├── Parte_04_ANOVA_QuiQuadrado/         # Análise de variância e associação
+├── Parte_05_Regressao_Linear_CAPM/     # Modelagem CAPM e diagnóstico
+├── Parte_06_GLM_Series_Temporais/      # GLM e previsão ARIMA
+├── data/                               # Dados brutos (opcional)
+├── resultados/                         # Resultados exportados
+└── graficos/                           # Visualizações geradas
 ```
+
+---
+
+## 📚 Conteúdo por Parte
+
+### [Parte 1: Prova da Não-Normalidade dos Retornos](Parte_01_Prova_Nao_Normalidade/)
+**Conceitos:** Distribuições, assimetria, curtose, testes de normalidade
+
+Demonstra estatisticamente que retornos financeiros não seguem distribuição normal:
+- ✅ Coleta de dados de múltiplas fontes (B3 e Yahoo Finance)
+- ✅ Cálculo de retornos logarítmicos
+- ✅ Análise de assimetria e curtose
+- ✅ Aplicação de testes: Shapiro-Wilk, Jarque-Bera, Anderson-Darling
+- ✅ Visualizações: QQ-Plots, histogramas, análise de caudas
+
+**Resultados:** Todos os ativos rejeitam a hipótese de normalidade (p < 0.05)
+
+---
+
+### [Parte 2: Simulação de Monte Carlo](Parte_02_Simulacao_Monte_Carlo/)
+**Conceitos:** Bootstrap, Value at Risk (VaR), Expected Shortfall (CVaR)
+
+Estima a distribuição de probabilidade do patrimônio futuro:
+- ✅ Reamostragem com bootstrap de retornos históricos
+- ✅ Simulação de 10.000+ cenários futuros
+- ✅ Cálculo de VaR e CVaR em múltiplos níveis de confiança
+- ✅ Análise de drawdown máximo
+- ✅ Probabilidade de atingir metas específicas
+
+**Resultados:** 69.4% chance de lucro, VaR 95%: R$ 7.150, drawdown médio: 23.8%
+
+---
+
+### [Parte 3: Inferência Estatística](Parte_03_Inferencia_Estatistica/)
+**Conceitos:** Testes paramétricos e não-paramétricos, bootstrap, intervalos de confiança
+
+Compara distribuições e estima parâmetros populacionais:
+- ✅ Teste t de Student (paramétrico)
+- ✅ Teste de Wilcoxon-Mann-Whitney (não-paramétrico)
+- ✅ Teste de Kolmogorov-Smirnov
+- ✅ Bootstrap para intervalos de confiança
+- ✅ Tamanho de efeito (Cohen's d, Cliff's Delta)
+
+**Resultados:** Não há diferença significativa entre os ativos (p > 0.05), tamanho do efeito desprezível
+
+---
+
+### [Parte 4: ANOVA e Qui-Quadrado](Parte_04_ANOVA_QuiQuadrado/)
+**Conceitos:** Análise de variância, tabelas de contingência, medidas de associação
+
+Analisa diferenças entre grupos e associação entre variáveis:
+- ✅ ANOVA clássica e robusta (Welch)
+- ✅ Teste post-hoc de Tukey HSD
+- ✅ Teste de Kruskal-Wallis (não-paramétrico)
+- ✅ Teste Qui-Quadrado de independência
+- ✅ V de Cramér e medidas de associação
+
+---
+
+### [Parte 5: Regressão Linear - CAPM](Parte_05_Regressao_Linear_CAPM/)
+**Conceitos:** Modelo de precificação, diagnóstico de regressão, erros robustos
+
+Estima o Beta de um ativo em relação ao mercado:
+- ✅ Modelo CAPM (Capital Asset Pricing Model)
+- ✅ Cálculo de Beta e Alfa
+- ✅ Diagnóstico completo de resíduos
+- ✅ Testes de autocorrelação (Durbin-Watson)
+- ✅ Testes de heterocedasticidade (Breusch-Pagan)
+
+---
+
+### [Parte 6: GLM e Séries Temporais](Parte_06_GLM_Series_Temporais/)
+**Conceitos:** Regressão logística, ARIMA, previsão de séries
+
+Modela eventos extremos e prevê retornos futuros:
+- ✅ Regressão Logística para previsão de crises
+- ✅ Interpretação via Odds Ratio
+- ✅ Curva ROC e AUC
+- ✅ Modelos ARIMA (Auto-Regressive Integrated Moving Average)
+- ✅ Previsões com intervalos de confiança
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+| Categoria | Pacotes R |
+|-----------|-----------|
+| **Coleta de Dados** | `rb3` (B3 oficial), `yfR` (Yahoo Finance) |
+| **Manipulação** | `tidyverse`, `dplyr`, `tidyr`, `lubridate` |
+| **Estatística** | `moments`, `nortest`, `car`, `lmtest` |
+| **Simulação** | `boot`, `forecast` |
+| **Visualização** | `ggplot2`, `ggcorrplot`, `corrplot` |
+| **Modelagem** | `broom`, `performance`, `sandwich` |
 
 ---
 
 ## 🚀 Como Executar
 
 ### Pré-requisitos
-```r
-install.packages(c("yfR", "dplyr", "moments", "nortest", "car", "ggplot2"))
+```
+# Instalar R (versão 4.0 ou superior)
+# https://cran.r-project.org/
+
+# Instalar RStudio (recomendado)
+# https://posit.co/download/rstudio-desktop/
 ```
 
 ### Execução
-```r
-# Fonte o código completo
-source("Parte_01_Prova_Nao_Normalidade/codigo_parte1.R")
 ```
+# Execute cada parte sequencialmente
+source("Parte_01_Prova_Nao_Normalidade/codigo_parte1.R")
+source("Parte_02_Simulacao_Monte_Carlo/codigo_parte2.R")
+source("Parte_03_Inferencia_Estatistica/codigo_parte3.R")
+# ... e assim por diante
+```
+
+---
+
+## 📈 Resultados Principais
+
+### Parte 1: Prova da Não-Normalidade
+- **Conclusão**: Todos os ativos rejeitam a hipótese de normalidade (p < 0.05)
+- **Curtose**: WEGE3 (8.14), HGLG11 (7.03), BTC-USD (3.44)
+- **Assimetria**: WEGE3 (-0.78), HGLG11 (0.73), BTC-USD (0.09)
+
+### Parte 2: Simulação de Monte Carlo (WEGE3)
+- **Probabilidade de lucro**: 69.4%
+- **Retorno esperado**: 19.9% ao ano
+- **VaR 95%**: R$ 7.150 (perda máxima esperada)
+- **Drawdown médio**: 23.8%
+
+### Parte 3: Inferência Estatística
+- **Conclusão**: Não há diferença significativa entre os ativos (p > 0.05)
+- **Tamanho do efeito**: Desprezível (Cohen's d < 0.2)
 
 ---
 
 ## 📚 Referências
 
-- **Mandelbrot, B. (1963).** The Variation of Certain Speculative Prices. *The Journal of Business*, 36(4), 394-419.
-- **Fama, E. (1965).** The Behavior of Stock-Market Prices. *The Journal of Business*, 38(1), 34-105.
-- **Cont, R. (2001).** Empirical properties of asset returns: stylized facts and statistical issues. *Quantitative Finance*, 1(2), 223-236.
-- **Jarque, C. & Bera, A. (1980).** Efficient tests for normality, homoscedasticity and serial independence of regression residuals. *Economics Letters*, 6(3), 255-259.
-
----
-
-## 🎯 Próximas Partes
-
-- **Parte 2:** Simulação de Monte Carlo e Análise de Risco
-- **Parte 3:** Inferência Estatística e Testes de Hipóteses
-- **Parte 4:** ANOVA e Análise de Associação (Qui-Quadrado)
-- **Parte 5:** Regressão Linear - Modelo CAPM
-- **Parte 6:** GLM e Séries Temporais (ARIMA)
+- **Mandelbrot, B. (1963).** The Variation of Certain Speculative Prices.
+- **Fama, E. (1965).** The Behavior of Stock-Market Prices.
+- **Hull, J. (2018).** Risk Management and Financial Institutions.
+- **Jorion, P. (2006).** Value at Risk: The New Benchmark.
 
 ---
 
@@ -199,4 +191,4 @@ source("Parte_01_Prova_Nao_Normalidade/codigo_parte1.R")
 
 ---
 
-⬅️ [Voltar ao README Principal](../README.md) | ➡️ [Ir para Parte 2](../Parte_02_Simulacao_Monte_Carlo/)
+⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!
