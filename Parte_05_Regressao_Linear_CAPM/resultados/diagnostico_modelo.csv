@@ -1,0 +1,5 @@
+"Teste","Estatistica","p_valor","Conclusao"
+"Shapiro-Wilk",0.885491583865506,0.0000000000000000000813328222944607,"Não normal"
+"Durbin-Watson",2.06177871296073,0.767097648250965,"Sem autocorrelação"
+"Breusch-Pagan",0.490942781502297,0.483507052396706,"Homocedasticidade"
+"RESET",2.9329100358745,0.0540766746729946,"Bem especificado"
