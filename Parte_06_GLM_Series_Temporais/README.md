@@ -104,6 +104,8 @@ H₁: A série é estacionária
 | Métrica | Valor | Interpretação |
 |---------|-------|---------------|
 | **Acurácia** | 92.04% | Modelo acerta 92% das previsões |
+| **Sensibilidade** | 0% | Não detectou nenhuma crise |
+| **Especificidade** | 99.8% | Excelente para identificar não-crises |
 | **AUC** | 0.6584 | Poder discriminatório razoável |
 
 ---
@@ -160,7 +162,40 @@ H₁: A série é estacionária
 
 ---
 
-## 🎯 Conclusões
+## ⚠️ Limitações e Considerações Finais
+
+### Desequilíbrio de Classes
+
+O modelo de Regressão Logística apresentou uma limitação importante: **não detectou nenhum evento de crise** (sensibilidade = 0%). Isso ocorre porque:
+
+- Apenas **7.78%** dos dias (43 de 553) são classificados como crise
+- O modelo otimizou a acurácia geral (92.04%) às custas da detecção de crises
+
+### Por que o modelo ainda é válido para este projeto?
+
+| Critério | Justificativa |
+|----------|---------------|
+| **Significância estatística** | O coeficiente do Ibovespa tem p-valor < 0.001 |
+| **Consistência** | Confirma o Beta defensivo (0.5867) da Parte 5 |
+| **Objetivo educacional** | O foco é ensinar o conceito de Regressão Logística |
+| **Interpretação do OR** | Odds Ratio = 0.5524 é clinicamente significativo |
+
+### Próximos Passos para Melhoria
+
+Para uma versão futura do projeto, recomenda-se:
+
+1. **Balanceamento de classes**: Aplicar técnica SMOTE para criar exemplos sintéticos de crise
+2. **Múltiplos preditores**: Incluir volume, volatilidade e indicadores técnicos
+3. **Threshold otimizado**: Ajustar o ponto de corte usando o índice de Youden
+4. **Modelos alternativos**: Testar Random Forest ou XGBoost para comparação
+
+### Conclusão sobre o Modelo
+
+Apesar da limitação na detecção de crises, o modelo **atingiu seu objetivo principal**: demonstrar a aplicação da Regressão Logística em finanças e confirmar, com significância estatística, o comportamento defensivo da WEGE3 em relação ao Ibovespa.
+
+---
+
+## 🎯 Conclusões do Projeto
 
 ### Principais Descobertas
 
